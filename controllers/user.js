@@ -1,6 +1,9 @@
 import { User } from "../models/user.js";
 import cloudinary from "../config/cloudinary.js";
 import jwt from "jsonwebtoken";
+import ShortUniqueId from "short-unique-id";
+
+const uid = new ShortUniqueId({ length: 6, dictionary: "number" });
 
 export const register = async (req, res) => {
   const { fullName, email, capturedImg } = req.body;
@@ -23,7 +26,9 @@ export const register = async (req, res) => {
       folder: "user_imgs",
     });
 
+    const ticketId = uid.rnd();
     const user = await User.create({
+      ticketId,
       fullName,
       email,
       capturedImg: uploadedImg.secure_url,
@@ -40,11 +45,13 @@ export const register = async (req, res) => {
         secure: true,
       })
       .json({
-        msg: "User created sucessfully!",
+        msg: "Submitted sucessfully!",
       });
   } catch (err) {
+    console.log(err);
     res.status(500).json({
       msg: "Something went wrong!",
+      err: err.message,
     });
   }
 };
