@@ -4,6 +4,7 @@ import { connectDB } from "./config/connectDB.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import userRoutes from "./routes/user.js";
+import adminRoutes from "./routes/admin.js";
 
 config({ path: "./.env" });
 const app = express();
@@ -22,6 +23,7 @@ app.use(express.json({ limit: "100mb" }));
 app.use(cookieParser());
 
 app.use("/users", userRoutes);
+app.use("/admin", adminRoutes);
 
 //home route
 app.get("/", (req, res) => {
